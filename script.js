@@ -2,13 +2,17 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("analyzeBtn").addEventListener("click", async (e) => {
     e.preventDefault();
 
-    const resumeInput = document.getElementById("resume");
-    const jobDescription = document.getElementById("jd").value;
+    const resumeInput = document.getElementById("resumeFile");
+    const jobDescription = document.getElementById("jobDescription").value;
     const resultBox = document.getElementById("result");
     const btn = document.getElementById("analyzeBtn");
     const spinner = document.getElementById("spinner");
+    const scoreSpan = document.getElementById("score");
+    const scoreBar = document.getElementById("scoreBar");
+    const explanation = document.getElementById("explanation");
+    const suggestionsList = document.getElementById("suggestions");
 
-    if (!resumeInput || !resumeInput.files || !jobDescription) {
+    if (!resumeInput || !resumeInput.files.length || !jobDescription.trim()) {
       alert("Please upload a resume and enter a job description.");
       return;
     }
@@ -30,19 +34,20 @@ document.addEventListener("DOMContentLoaded", () => {
         body: formData,
       });
 
-      if (!response.ok) throw new Error("Network response was not OK");
+      if (!response.ok) throw new Error("Failed to analyze resume.");
 
       const result = await response.json();
 
-      resultBox.innerHTML = `
-        <p><strong>Match Score:</strong> ${result.match_score}%</p>
-        <p><strong>Explanation:</strong> ${result.explanation}</p>
-        <p><strong>Suggestions:</strong></p>
-        <ul>${result.suggestions.map((item) => `<li>${item}</li>`).join("")}</ul>
-      `;
-    } catch (err) {
+      // Display result
+      document.getElementById("result").classList.remove("hidden");
+      scoreSpan.textContent = result.match_score;
+      scoreBar.style.width = `${result.match_score}%`;
+      explanation.textContent = result.explanation;
+      suggestionsList.innerHTML = result.suggestions.map(s => `<li>${s}</li>`).join("");
+
+    } catch (error) {
+      console.error("Error during analysis:", error);
       resultBox.innerHTML = `<p style="color:red;">Error analyzing resume. Please try again later.</p>`;
-      console.error("Error during resume analysis:", err);
     } finally {
       spinner.style.display = "none";
       btn.disabled = false;
