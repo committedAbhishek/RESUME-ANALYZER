@@ -1,49 +1,46 @@
-document.getElementById("analyzerForm").addEventListener("submit", async function (e) {
-  e.preventDefault();
-
-  const resumeFile = document.getElementById("resumeFile").files[0];
-  const jobDescription = document.getElementById("jobDescription").value;
+document.getElementById("analyzeBtn").addEventListener("click", async () => {
+  const resumeFile = document.getElementById("resume").files[0];
+  const jobDescription = document.getElementById("jd").value;
+  const resultBox = document.getElementById("result");
+  const btn = document.getElementById("analyzeBtn");
 
   if (!resumeFile || !jobDescription) {
     alert("Please upload a resume and enter a job description.");
     return;
   }
 
+  // ✅ Show loading state
+  btn.disabled = true;
+  btn.innerText = "Analyzing...";
+
   const formData = new FormData();
   formData.append("resume_file", resumeFile);
   formData.append("job_description", jobDescription);
 
   try {
-    const res = await fetch("https://resume-analyzer-backend-cdim.onrender.com/api/match", {
+    const response = await fetch("https://resume-analyzer-backend-cdim.onrender.com/api/match", {
       method: "POST",
-      body: formData,
+      body: formData
     });
 
-    if (!res.ok) {
-      throw new Error("Failed to analyze resume");
+    if (!response.ok) {
+      throw new Error("Network response was not OK");
     }
 
-    const data = await res.json();
+    const result = await response.json();
 
-    // Display results
-    // Display results
-document.getElementById("score").textContent = `${data.match_score}`;
-document.getElementById("scoreBar").style.width = `${data.match_score}%`;
-document.getElementById("explanation").textContent = data.explanation;
-
-const suggestionsList = document.getElementById("suggestions");
-suggestionsList.innerHTML = "";
-data.suggestions.forEach((item) => {
-  const li = document.createElement("li");
-  li.textContent = item;
-  suggestionsList.appendChild(li);
-});
-
-document.getElementById("result").classList.remove("hidden");
-
-
+    resultBox.innerHTML = `
+      <p><strong>Match Score:</strong> ${result.match_score}%</p>
+      <p><strong>Explanation:</strong> ${result.explanation}</p>
+      <p><strong>Suggestions:</strong></p>
+      <ul>${result.suggestions.map(item => `<li>${item}</li>`).join("")}</ul>
+    `;
   } catch (err) {
-    console.error(err);
-    alert("Error analyzing the resume. Check if the backend is running.");
+    resultBox.innerHTML = `<p style="color:red;">Error analyzing resume. Please try again later.</p>`;
+    console.error("Error during resume analysis:", err);
   }
+
+  // ✅ Reset button after result
+  btn.disabled = false;
+  btn.innerText = "Analyze";
 });
