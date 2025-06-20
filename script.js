@@ -3,15 +3,17 @@ document.getElementById("analyzeBtn").addEventListener("click", async () => {
   const jobDescription = document.getElementById("jd").value;
   const resultBox = document.getElementById("result");
   const btn = document.getElementById("analyzeBtn");
+  const spinner = document.getElementById("spinner");
 
   if (!resumeFile || !jobDescription) {
     alert("Please upload a resume and enter a job description.");
     return;
   }
 
-  // ✅ Show loading state
+  // Show loading UI
   btn.disabled = true;
   btn.innerText = "Analyzing...";
+  spinner.style.display = "block";
 
   const formData = new FormData();
   formData.append("resume_file", resumeFile);
@@ -38,9 +40,10 @@ document.getElementById("analyzeBtn").addEventListener("click", async () => {
   } catch (err) {
     resultBox.innerHTML = `<p style="color:red;">Error analyzing resume. Please try again later.</p>`;
     console.error("Error during resume analysis:", err);
+  } finally {
+    // Reset UI
+    spinner.style.display = "none";
+    btn.disabled = false;
+    btn.innerText = "Analyze";
   }
-
-  // ✅ Reset button after result
-  btn.disabled = false;
-  btn.innerText = "Analyze";
 });
