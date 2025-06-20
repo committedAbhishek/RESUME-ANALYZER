@@ -1,5 +1,6 @@
 document.getElementById("analyzeBtn").addEventListener("click", async (e) => {
-  e.preventDefault();
+  e.preventDefault(); // ✅ Now this works, because 'e' is passed in
+
   const resumeFile = document.getElementById("resume").files[0];
   const jobDescription = document.getElementById("jd").value;
   const resultBox = document.getElementById("result");
@@ -11,7 +12,7 @@ document.getElementById("analyzeBtn").addEventListener("click", async (e) => {
     return;
   }
 
-  // Show loading UI
+  // ✅ Show loading UI
   btn.disabled = true;
   btn.innerText = "Analyzing...";
   spinner.style.display = "block";
@@ -42,7 +43,7 @@ document.getElementById("analyzeBtn").addEventListener("click", async (e) => {
     resultBox.innerHTML = `<p style="color:red;">Error analyzing resume. Please try again later.</p>`;
     console.error("Error during resume analysis:", err);
   } finally {
-    // Reset UI
+    // ✅ Hide loading spinner and re-enable the button
     spinner.style.display = "none";
     btn.disabled = false;
     btn.innerText = "Analyze";
