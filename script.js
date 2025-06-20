@@ -1,4 +1,4 @@
-document.getElementById("analyzeBtn").addEventListener("click", async () => {
+document.getElementById("analyzeBtn").addEventListener("click", async (e) => {
   e.preventDefault();
   const resumeFile = document.getElementById("resume").files[0];
   const jobDescription = document.getElementById("jd").value;
