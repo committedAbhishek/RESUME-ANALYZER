@@ -1,7 +1,9 @@
 let lastRankedResults = [];
 
-// Auto-detect backend URL
-const backendUrl = window.location.hostname.includes("localhost")
+// Smart backend URL detection
+const isLocal = window.location.href.startsWith("file://") || window.location.hostname.includes("localhost");
+
+const backendUrl = isLocal
   ? "http://127.0.0.1:8000"
   : "https://resume-analyzer-backend-cdim.onrender.com";
 
@@ -21,7 +23,6 @@ document.getElementById("rankerForm").addEventListener("submit", async (e) => {
     return;
   }
 
-  // Reset UI
   tableBody.innerHTML = "";
   rankResult.classList.add("hidden");
   downloadBtn.classList.add("hidden");
@@ -42,7 +43,6 @@ document.getElementById("rankerForm").addEventListener("submit", async (e) => {
     const ranked = await response.json();
     lastRankedResults = ranked.results;
 
-    // Render rows
     lastRankedResults.forEach((item, index) => {
       const row = document.createElement("tr");
       row.innerHTML = `
