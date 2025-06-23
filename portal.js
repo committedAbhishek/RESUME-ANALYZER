@@ -1,7 +1,7 @@
 // Optional: Future login check logic can be added here if needed
 
 document.getElementById("analyzerCard").addEventListener("click", () => {
-  window.location.href = "index.html";  // Analyzer tool
+  window.location.href = "analyzer.html";  // Analyzer tool
 });
 
 document.getElementById("rankerCard").addEventListener("click", () => {

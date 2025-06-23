@@ -1,53 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Resume Analyzer</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <title>Resume Portal Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <a href="dashboard.html" class="back-btn">⬅️ Back to Dashboard</a>
-
   <div class="container">
-    <div class="toggle-wrapper">
+    <!-- <div class="toggle-wrapper">
         <label class="switch">
             <input type="checkbox" id="themeToggle" />
             <span class="slider"></span>
         </label>
         <span class="toggle-label">Dark Mode</span>
+    </div> -->
+
+    <h1>🚀 Welcome to Resume Portal</h1>
+    <p class="subheading">✨ Select a tool to get started:</p>
+
+    <div class="tool-cards">
+      <div class="tool-card" id="analyzerCard">
+        <h2>🔍 Resume Analyzer</h2>
+        <p>Analyze a single resume and get a detailed match score.</p>
+        <button>Launch</button>
+      </div>
+
+      <div class="tool-card" id="rankerCard">
+        <h2>📊 Resume Ranker</h2>
+        <p>Upload multiple resumes and get ranked results.</p>
+        <button>Launch</button>
+      </div>
     </div>
-    <h1> 🚀 Resume Analyzer</h1>
 
-    <form id="analyzerForm">
-      <label>Upload Resume (PDF):</label>
-      <input type="file" id="resumeFile" accept=".pdf" required />
-
-      <label>Paste Job Description:</label>
-      <textarea id="jobDescription" rows="5" required></textarea>
-
-      <button type="button" id="analyzeBtn">Analyze</button>
-    </form>
-    <div id="spinner" style="display: none; text-align: center; margin: 1rem 0;">
-      <div class="loader"></div>
-        <p style="color: #0ea5e9; font-weight: bold;">Analyzing your resume...</p>
-    </div>
-    <div id="result" class="result-card hidden">
-  <h2><span style="font-size: 20px;">📊</span> Match Score</h2>
-  <div class="progress-container">
-    <div id="scoreBar" class="progress-bar"></div>
-  </div>
-  <p class="score-text"><strong>Score:</strong> <span id="score">0</span>/100</p>
-
-  <h2><span style="font-size: 20px;">💡</span> Explanation</h2>
-  <p id="explanation"></p>
-
-  <h2><span style="font-size: 20px;">✅</span> Suggestions</h2>
-  <ul id="suggestions"></ul>
-</div>
-
+    <!-- <button id="logoutBtn" style="margin-top: 2rem;">Logout</button> -->
   </div>
 
-  <script src="script.js"></script>
+  <script src="portal.js"></script>
 </body>
 </html>
