@@ -1,5 +1,10 @@
 let lastRankedResults = [];
 
+// Auto-detect backend URL
+const backendUrl = window.location.hostname.includes("localhost")
+  ? "http://127.0.0.1:8000"
+  : "https://resume-analyzer-backend-cdim.onrender.com";
+
 // Handle form submit
 document.getElementById("rankerForm").addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -27,7 +32,7 @@ document.getElementById("rankerForm").addEventListener("submit", async (e) => {
   formData.append("job_description", jd);
 
   try {
-    const response = await fetch("http://127.0.0.1:8000/api/rank", {
+    const response = await fetch(`${backendUrl}/api/rank`, {
       method: "POST",
       body: formData,
     });
@@ -35,7 +40,7 @@ document.getElementById("rankerForm").addEventListener("submit", async (e) => {
     if (!response.ok) throw new Error("Network error");
 
     const ranked = await response.json();
-    lastRankedResults = ranked.results;  // ✅ Save results for CSV
+    lastRankedResults = ranked.results;
 
     // Render rows
     lastRankedResults.forEach((item, index) => {
@@ -59,7 +64,7 @@ document.getElementById("rankerForm").addEventListener("submit", async (e) => {
   }
 });
 
-// Handle CSV download (client-side)
+// Handle CSV download
 document.getElementById("downloadBtn").addEventListener("click", () => {
   const downloadBtn = document.getElementById("downloadBtn");
 
@@ -68,12 +73,10 @@ document.getElementById("downloadBtn").addEventListener("click", () => {
     return;
   }
 
-  // Show loading state
   downloadBtn.disabled = true;
   const originalText = downloadBtn.innerHTML;
   downloadBtn.innerHTML = "⏳ Downloading...";
 
-  // Prepare CSV data
   const csvHeader = ["Rank", "Filename", "Score", "Explanation"];
   const csvRows = lastRankedResults.map((item, index) => [
     index + 1,
@@ -95,22 +98,20 @@ document.getElementById("downloadBtn").addEventListener("click", () => {
   a.click();
   window.URL.revokeObjectURL(url);
 
-  // Restore button
   setTimeout(() => {
     downloadBtn.disabled = false;
     downloadBtn.innerHTML = originalText;
   }, 1000);
 });
 
+// Global dark mode
 const themeToggle = document.getElementById("themeToggle");
 
-// Apply saved preference on page load
 if (localStorage.getItem("darkMode") === "true") {
   document.body.classList.add("dark");
   if (themeToggle) themeToggle.checked = true;
 }
 
-// Listen for toggle changes
 if (themeToggle) {
   themeToggle.addEventListener("change", (e) => {
     const isDark = e.target.checked;
@@ -118,4 +119,3 @@ if (themeToggle) {
     localStorage.setItem("darkMode", isDark);
   });
 }
-
