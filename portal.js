@@ -10,7 +10,7 @@ document.getElementById("rankerCard").addEventListener("click", () => {
 
 document.getElementById("logoutBtn").addEventListener("click", () => {
   // You can clear session storage or just redirect
-  window.location.href = "dashboard.html";
+  window.location.href = "index.html";
 });
 
 const themeToggle = document.getElementById("themeToggle");
